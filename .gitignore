@@ -1,0 +1,30 @@
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+
+# User-specific files
+.Ruserdata
+
+# RStudio
+.Rproj.user/
+
+# Temporary files created by bookdown
+_book/
+_bookdown_files/
+
+# LaTeX auxiliary files
+*.aux
+*.log
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+[Dd]esktop.ini
+
+# Project specific
+packages.bib

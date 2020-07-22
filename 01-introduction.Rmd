@@ -1,0 +1,44 @@
+# 简介 {#intro}
+
+这是 SJTUThesis bookdown 示例。
+
+## 二级标题
+
+### 三级标题
+
+#### 四级标题
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+culpa qui officia deserunt mollit anim id est laborum.
+
+## 脚注
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+incididunt ut labore et dolore magna aliqua. ^[Ut enim ad minim veniam, quis
+nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+fugiat nulla pariatur.]
+
+## bookdown 测试
+
+现在我们可以试试 **bookdown** [@rmarkdown2018] 的一些初级功能了 @knitr2014 ，例
+如图表。图 \@ref(fig:hello) 是一幅无趣的散点图，表 \@ref(tab:iris) 是一份枯燥的
+数据。
+
+```{r hello, fig.cap='雷猴啊，散点图！', out.width='90%'}
+par(mar = c(4, 4, 1, .1))
+plot(cars, pch = 19)
+```
+
+```{r iris}
+knitr::kable(
+  head(iris), caption = '雷猴啊，iris 数据！',
+  booktabs = TRUE
+)
+```
+
+就这样，你可以一直编下去，直到编不下去。

@@ -1,0 +1,17 @@
+bookdown::pdf_book:
+  includes:
+    before_body:
+      - latex/nomenclature.tex
+    after_body:
+      - latex/acknowledgements.tex
+      - latex/publications.tex
+      - latex/achievements.tex
+      - latex/resume.tex
+      - latex/english_digest.tex
+  keep_tex: yes
+  dev: "cairo_pdf"
+  latex_engine: xelatex
+  citation_package: biblatex
+  template: latex/template.tex
+  pandoc_args: "--top-level-division=chapter"
+  quote_footer: ["\\begin{flushright}", "\\end{flushright}"]
