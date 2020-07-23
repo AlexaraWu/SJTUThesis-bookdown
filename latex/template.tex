@@ -8,10 +8,10 @@ $if(title-en)$
     title*          = {$title-en$},
 $endif$
 $if(keywords-zh)$
-    keywords        = {$keywords-zh$},
+    keywords        = {$for(keywords-zh)$$keywords-zh$$sep$,$endfor$},
 $endif$
 $if(keywords-en)$
-    keywords*       = {$keywords-en$},
+    keywords*       = {$for(keywords-en)$$keywords-en$$sep$,$endfor$},
 $endif$
 $if(author-zh)$
     author          = {$author-zh$},
@@ -48,6 +48,15 @@ $if(department-en)$
 $endif$
 $if(course-zh)$
     course          = {$course-zh$},
+$endif$
+$if(date)$
+    date            = {$date$},
+$endif$
+$if(fund-zh)$
+    fund            = {$for(fund-zh)${$fund-zh$}$sep$,$endfor$},
+$endif$
+$if(fund-en)$
+    fund*           = {$for(fund-en)${$fund-en$}$sep$,$endfor$},
 $endif$
   },
 }
@@ -131,6 +140,22 @@ $endfor$
 
 $if(title-zh)$
 \maketitle
+$endif$
+
+$if(scaned-originality)$
+\originalitypage[$scaned-originality$]
+$else$
+$if(originality)$
+\originalitypage
+$endif$
+$endif$
+
+$if(scaned-copyright)$
+\copyrightpage[$scaned-copyright$]
+$else$
+$if(copyright)$
+\copyrightpage
+$endif$
 $endif$
 
 \frontmatter

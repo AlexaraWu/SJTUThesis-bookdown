@@ -3,10 +3,22 @@ classoption: [type=master, oneside]
 bibliography: [thesis.bib, packages.bib]
 biblio-style: gb7714-2015
 biblatexoptions: [backend=biber, gbpub=false, gbpunctin=false]
+originality: true
+scaned-originality: scans/originality.pdf
+copyright: true
+scaned-copyright: null
+lof: true
+lot: true
 title-zh: "上海交通大学学位论文 bookdown 模板示例文档"
 title-en: "A Sample Document for bookdown-based SJTU Thesis Template"
-keywords-zh: "上海交大, 饮水思源, 爱国荣校"
-keywords-en: "SJTU, master thesis, bookdown template"
+keywords-zh:
+  - "上海交大"
+  - "饮水思源"
+  - "爱国荣校"
+keywords-en:
+  - "SJTU"
+  - "master thesis"
+  - "bookdown template"
 author-zh: "某某"
 author-en: "Mo Mo"
 supervisor-zh: "某某教授"
@@ -19,7 +31,13 @@ major-en: "A Very Important Major"
 department-zh: "某某系"
 department-en: "Depart of XXX"
 course-zh: "某某课程"
-date: "`r Sys.Date()`"
+# date: "`r Sys.Date()`"
+# fund-zh:
+#   - "国家 973 项目 (No. 2025CB000000)"
+#   - "国家自然科学基金 (No. 81120250000)"
+# fund-en:
+#   - "National Basic Research Program of China (Grant No. 2025CB000000)"
+#   - "National Natural Science Foundation of China (Grant No. 81120250000)"
 abstract-zh: |
   中文摘要应该将学位论文的内容要点简短明了地表达出来，应该包含论文中的基本信息，
   体现科研工作的核心思想。摘要内容应涉及本项科研工作的目的和意义、研究方法、研究
@@ -39,8 +57,6 @@ abstract-en: |
   has been actively involved in international academic exchange programs. It is
   the center of CERNet in east China region, through computer networks, SJTU has
   faster and closer connection with the world.
-lof: yes
-lot: yes
 ---
 
 ```{r setup, include=FALSE}
