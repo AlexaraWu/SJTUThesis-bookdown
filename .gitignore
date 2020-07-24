@@ -8,8 +8,15 @@
 # User-specific files
 .Ruserdata
 
+# R Environment Variables
+.Renviron
+
 # RStudio
 .Rproj.user/
+
+# Temporary files created by R markdown
+*.utf8.md
+*.knit.md
 
 # Temporary files created by bookdown
 _book/
