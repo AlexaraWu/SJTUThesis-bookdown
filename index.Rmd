@@ -6,7 +6,7 @@ biblatexoptions: [backend=biber, gbpub=false, gbpunctin=false]
 originality: true
 scaned-originality: scans/originality.pdf
 copyright: true
-scaned-copyright: null
+# scaned-copyright: scans/copyright.pdf
 lof: true
 lot: true
 title-zh: "上海交通大学学位论文 bookdown 模板示例文档"
