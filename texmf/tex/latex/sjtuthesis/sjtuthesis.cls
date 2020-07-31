@@ -23,10 +23,10 @@
 %% 
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{sjtuthesis}
-  [2020/07/20 1.0.0rc6 Shanghai Jiao Tong University Thesis Template]
+  [2020/07/31 1.0.0rc7 Shanghai Jiao Tong University Thesis Template]
 \hyphenation{SJTU-Thesis}
 \def\sjtuthesis{SJTU\textsc{Thesis}}
-\def\version{1.0.0rc6}
+\def\version{1.0.0rc7}
 \newcommand\sjtu@error[1]{%
   \ClassError{sjtuthesis}{#1}{}%
 }
@@ -148,7 +148,7 @@
     },
   },
 }
-\DeclareBoolOption{review}
+\DeclareBoolOption[false]{review}
 \DeclareBoolOption[false]{continuous}
 \DeclareDefaultOption{\PassOptionsToClass{\CurrentOption}{ctexbook}}
 \ProcessKeyvalOptions*
@@ -177,8 +177,9 @@
     \input{sjtuthesis-undergraduate.ltx}
   \fi
 }
-\RequirePackage{etoolbox}
 \RequirePackage{xparse}
+\RequirePackage{etoolbox}
+\RequirePackage{filehook}
 \RequirePackage{environ}
 \RequirePackage{geometry}
 \RequirePackage{fancyhdr}
@@ -200,7 +201,8 @@
 \RequirePackage{pdfpages}
 \includepdfset{fitpaper=true}
 \RequirePackage{url}
-\RequirePackage{filehook}
+\RequirePackage{silence}
+\WarningFilter{pageslts}{Package pdfpages detected}
 \newcommand\sjtu@package@conflict[2]{
   \AtBeginOfPackageFile*{#2}{
     \sjtu@error{The `#2' package is incompatible with required `#1'}
@@ -214,6 +216,10 @@
 \sjtu@package@conflict{unicode-math}{eucal}
 \sjtu@package@conflict{unicode-math}{eufrak}
 \sjtu@package@conflict{unicode-math}{mathrsfs}
+\newcommand\sjtu@patchcmd[3]{%
+  \patchcmd{#1}{#2}{#3}{}%
+    {\sjtu@warning{Oops! Command `\protect#1' is NOT patchable.}}
+}
 \kv@define@key{sjtu}{style}{
   \kvsetkeys{sjtu@style}{#1}
 }
@@ -436,7 +442,7 @@
 \sjtu@name@def{copr@title}{\sjtu@name@thesis@kind\sjtu@name@copr@subtitle@zh}
 \sjtu@name@def{title@qouted}{《\sjtu@nopar\sjtu@info@title@zh》}
 \sjtu@name@def{origbody}{%
-  本人郑重声明：所呈交的\sjtu@name@thesis@kind \sjtu@name@title@qouted，
+  本人郑重声明：所呈交的\sjtu@name@thesis@kind\sjtu@name@title@qouted ，
   是本人在导师的指导下，独立进行研究工作所取得的成果。除文中已经注明引用
   的内容外，本论文不包含任何其他个人或集体已经发表或撰写过的作品成果。对
   本文的研究做出重要贡献的个人和集体，均已在文中以明确方式标明。本人完全
@@ -792,12 +798,10 @@
 \def\sjtu@thepage{}
 \def\sjtu@lastpageref{}
 \newif\ifsjtu@page@numbering \sjtu@page@numberingtrue
-\patchcmd\cleardoublepage%
+\sjtu@patchcmd\cleardoublepage%
   {\newpage}{\thispagestyle{empty}\newpage}
-  {}{}
-\patchcmd\chapter%
+\sjtu@patchcmd\chapter%
   {\thispagestyle}{\@gobble}
-  {}{}
 \AtBeginDocument{%
   \pagenumbering{Alph}
   \pagestyle{empty}
@@ -1002,15 +1006,9 @@
   \def\theequation{\thechapter\sjtu@style@eq@num@sep\arabic{equation}}
 }
 \newif\ifsjtu@set@float@fontsize \sjtu@set@float@fontsizefalse
-\renewcommand\@floatboxreset{%
-  \reset@font
-  \ifsjtu@set@float@fontsize
-    \zihao{5}
-  \else
-    \normalsize
-  \fi
-  \@setminipage
-}
+\sjtu@patchcmd\@floatboxreset%
+  {\normalsize}
+  {\ifsjtu@set@float@fontsize\zihao{5}\else\normalsize\fi}
 \NewDocumentCommand{\SJTUsetfloatfontsize}{}{\sjtu@set@float@fontsizetrue}
 \NewDocumentCommand{\SJTUunsetfloatfontsize}{}{\sjtu@set@float@fontsizefalse}
 \DeclareCaptionFont{sjtu@caption@font}{\zihao{5}\kaishu}
@@ -1047,20 +1045,22 @@
 \newcommand\square{\mdlgwhtsquare}
 \newcommand\sjtu@square{{\CJKfamily+{}\symbol{"25A1}}}
 \newcommand\sjtu@copr@addon{%
-  \par\hspace{7\ccwd}%
-  {\heiti 保\hspace{1\ccwd}密}~\sjtu@square，在 \uline{\hspace{3em}}
-  年解密后适用本授权书。\par
-  本\sjtu@name@thesis@type 属于
-  \par\hspace{7\ccwd}%
-  {\heiti 不保密}~\sjtu@square。
-  \vskip 1ex
+  \vskip 2ex
+  \begingroup
+    \linespread{1}\selectfont
+    本\sjtu@name@thesis@type 属于\parbox[c]{20\ccwd}{%
+      {\heiti 保\hspace{1\ccwd}密}~\sjtu@square ，
+      在\uline{\hspace{3em}}年解密后适用本授权书。\\\\
+      {\heiti 不保密}~\sjtu@square 。
+    }\par
+  \endgroup
+  \vskip 2ex
   （请在以上方框内打“$\checkmark$”）
 }
 \newcommand\sjtu@signbox[1]{%
   \parbox{.45\textwidth}{%
-    #1 签名： \vskip 4em%
-    日期： \hspace{\stretch{3}} 年%
-    \hspace{\stretch{2}} 月 \hspace{\stretch{2}} 日%
+    #1 签名：\vskip 4em
+    日期：\hspace{\stretch{3}}年\hspace{\stretch{2}}月\hspace{\stretch{2}}日
   }
 }
 \NewDocumentCommand{\originalitypage}{s O{}}{%
@@ -1076,17 +1076,22 @@
       }
       \begingroup
         \zihao{4}
-        \sjtu@name@origbody
+        \begingroup
+          \linespread{1.5}\selectfont
+          \sjtu@name@origbody\par
+        \endgroup
         \vskip 16ex
         \noindent
         \begin{minipage}{\textwidth}
           \hfill
           \sjtu@signbox{\sjtu@name@thesis@type 作者}
         \end{minipage}
+        \par
       \endgroup
     }{%
-      \sjtu@pdfbookmark{0}{\sjtu@name@orig@subtitle}%
-      \includepdf[pagecommand={\thispagestyle{empty}}]{#2}
+      \includepdf[pagecommand={%
+        \sjtu@pdfbookmark{0}{\sjtu@name@orig@subtitle}%
+      }]{#2}
     }
   \fi
 }
@@ -1100,9 +1105,11 @@
       }
       \begingroup
         \zihao{4}
-        \sjtu@name@coprbody
-        \vskip 1ex
-        \sjtu@copr@addon
+        \begingroup
+          \linespread{1.5}\selectfont
+          \sjtu@name@coprbody\par
+          \sjtu@copr@addon\par
+        \endgroup
         \vskip 16ex
         \noindent
         \begin{minipage}{\textwidth}
@@ -1110,10 +1117,12 @@
           \hfill
           \sjtu@signbox{指导教师}
         \end{minipage}
+        \par
       \endgroup
     }{%
-      \sjtu@pdfbookmark{0}{\sjtu@name@copr@subtitle}%
-      \includepdf[pagecommand={\thispagestyle{empty}}]{#1}
+      \includepdf[pagecommand={%
+        \sjtu@pdfbookmark{0}{\sjtu@name@copr@subtitle}%
+      }]{#1}
     }
   \fi
 }
@@ -1278,7 +1287,7 @@
     \phantomsection
   }
   \pdfstringdefDisableCommands{%
-    \let\\\@empty 
+    \let\\\@empty
     \let\quad\@empty
     \let\hspace\@gobble
   }
@@ -1320,42 +1329,51 @@
 }
 \newcommand\sjtu@def@theorem@name{%
   \ifsjtu@language@chinese
-    \sjtu@name@def{assertion}{断言}
     \sjtu@name@def{assumption}{假设}
     \sjtu@name@def{axiom}{公理}
+    \sjtu@name@def{conjecture}{猜想}
     \sjtu@name@def{corollary}{推论}
     \sjtu@name@def{definition}{定义}
     \sjtu@name@def{example}{例}
+    \sjtu@name@def{exercise}{练习}
     \sjtu@name@def{lemma}{引理}
+    \sjtu@name@def{problem}{问题}
     \sjtu@name@def{proof}{证明}
     \sjtu@name@def{proposition}{命题}
     \sjtu@name@def{remark}{注}
+    \sjtu@name@def{solution}{解}
     \sjtu@name@def{theorem}{定理}
   \else
-    \sjtu@name@def{assertion}{Assertion}
     \sjtu@name@def{assumption}{Assumption}
     \sjtu@name@def{axiom}{Axiom}
+    \sjtu@name@def{conjecture}{Conjecture}
     \sjtu@name@def{corollary}{Corollary}
     \sjtu@name@def{definition}{Definition}
     \sjtu@name@def{example}{Example}
+    \sjtu@name@def{exercise}{Exercise}
     \sjtu@name@def{lemma}{Lemma}
+    \sjtu@name@def{problem}{Problem}
     \sjtu@name@def{proof}{Proof}
     \sjtu@name@def{proposition}{Proposition}
     \sjtu@name@def{remark}{Remark}
+    \sjtu@name@def{solution}{Solution}
     \sjtu@name@def{theorem}{Theorem}
   \fi
 }
 \newcommand\sjtu@def@theorem{%
-  \newtheorem{theorem}             {\sjtu@name@theorem}    [chapter]
-  \newtheorem{assertion}  [theorem]{\sjtu@name@assertion}
-  \newtheorem{axiom}      [theorem]{\sjtu@name@axiom}
-  \newtheorem{corollary}  [theorem]{\sjtu@name@corollary}
-  \newtheorem{lemma}      [theorem]{\sjtu@name@lemma}
-  \newtheorem{proposition}[theorem]{\sjtu@name@proposition}
-  \newtheorem{assumption}          {\sjtu@name@assumption} [chapter]
-  \newtheorem{definition}          {\sjtu@name@definition} [chapter]
-  \newtheorem{example}             {\sjtu@name@example}    [chapter]
-  \newtheorem*{remark}             {\sjtu@name@remark}
+  \newtheorem{assumption} {\sjtu@name@assumption} [chapter]
+  \newtheorem{axiom}      {\sjtu@name@axiom}      [chapter]
+  \newtheorem{conjecture} {\sjtu@name@conjecture} [chapter]
+  \newtheorem{corollary}  {\sjtu@name@corollary}  [chapter]
+  \newtheorem{definition} {\sjtu@name@definition} [chapter]
+  \newtheorem{example}    {\sjtu@name@example}    [chapter]
+  \newtheorem{exercise}   {\sjtu@name@exercise}   [chapter]
+  \newtheorem{lemma}      {\sjtu@name@lemma}      [chapter]
+  \newtheorem{problem}    {\sjtu@name@problem}    [chapter]
+  \newtheorem{proposition}{\sjtu@name@proposition}[chapter]
+  \newtheorem{theorem}    {\sjtu@name@theorem}    [chapter]
+  \newtheorem*{remark}    {\sjtu@name@remark}
+  \newtheorem*{solution}  {\sjtu@name@solution}
 }
 \PassOptionsToPackage{amsmath,thmmarks,hyperref}{ntheorem}
 \AtEndOfPackageFile*{ntheorem}{
@@ -1414,11 +1432,9 @@
   \apptocmd{\sjtu@def@thefloats}{%
     \def\thealgocf{\thechapter\sjtu@style@fl@num@sep\arabic{algocf}}
   }{}{}
-  \patchcmd{\algocf@latexcaption}{\addcontentsline}{%
-    \caption@iflist
-      {\addcontentsline}
-      {\@gobblethree}
-  }{}{}
+  \sjtu@patchcmd\algocf@latexcaption%
+    {\addcontentsline}
+    {\caption@iflist{\addcontentsline}{\@gobblethree}}
   \AtEndPreamble{%
     \newlength{\sjtu@cftalgnumwidth@tmp}
       \settowidth{\sjtu@cftalgnumwidth@tmp}{\cftalgpresnum}
@@ -1430,11 +1446,10 @@
   \RequirePackage{algorithmicx, algpseudocode}
   \floatname{algorithm}{\sjtu@name@algorithm}
   \@addtoreset{algorithm}{chapter}
-  \patchcmd\@chapter%
+  \sjtu@patchcmd\@chapter%
     {\if@twocolumn}
     {\addtocontents{loa}{\protect\addvspace{10\p@}}%
-      \if@twocolumn}
-    {}{}
+     \if@twocolumn}
   \def\listalgorithmname{\sjtu@name@listalgorithm}
   \newlistof{alg}{loa}{\listalgorithmname}
   \let\l@algorithm\l@alg
