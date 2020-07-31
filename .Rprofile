@@ -1,3 +1,5 @@
+options(bookdown.render.file_scope = FALSE)
+
 if (.Platform$OS.type == 'windows') Sys.setlocale(, 'Chinese')
 
 local({

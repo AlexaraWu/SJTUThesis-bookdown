@@ -24,7 +24,15 @@ _bookdown_files/
 
 # LaTeX auxiliary files
 *.aux
+*.bbl
+*.bcf
+*.blg
+*.lof
 *.log
+*.lot
+*.out
+*.thm
+*.toc
 
 # macOS
 .DS_Store

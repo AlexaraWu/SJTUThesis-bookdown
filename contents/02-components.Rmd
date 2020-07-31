@@ -1,0 +1,388 @@
+# Components
+
+This chapter demonstrates the syntax of common components of a book written in **bookdown**, including code chunks, figures, tables, citations, math theorems, and equations. The approach is based on Pandoc, so we start with the syntax of Pandoc's\index{Pandoc} flavor of Markdown.
+
+## Markdown syntax
+
+In this section, we give a very brief introduction to Pandoc's Markdown\index{Markdown}. Readers who are familiar with Markdown can skip this section. The comprehensive syntax of Pandoc's Markdown can be found on the Pandoc website <http://pandoc.org>.
+
+### Inline formatting
+
+You can make text _italic_ by surrounding it with underscores or asterisks, e.g., `_text_` or `*text*`. For **bold** text, use two underscores (`__text__`) or asterisks (`**text**`). Text surrounded by `~` will be converted to a subscript (e.g., `H~2~SO~4~` renders H~2~SO~4~), and similarly, two carets (`^`) produce a superscript (e.g., `Fe^2+^` renders Fe^2+^). To mark text as `inline code`, use a pair of backticks, e.g., `` `code` ``.^[To include literal backticks, use more backticks outside, e.g., you can use two backticks to preserve one backtick inside: ``` `` `code` `` ```.] Small caps can be produced by the HTML tag `span`, e.g., `<span style="font-variant:small-caps;">Small Caps</span>` renders <span style="font-variant:small-caps;">Small Caps</span>. Links are created using `[text](link)`, e.g., `[RStudio](https://www.rstudio.com)`, and the syntax for images is similar: just add an exclamation mark, e.g., `![alt text or image title](path/to/image)`. Footnotes are put inside the square brackets after a caret `^[]`, e.g., `^[This is a footnote.]`.
+
+### Block-level elements
+
+Section headers can be written after a number of pound signs, e.g.,
+
+```markdown
+# First-level header
+
+## Second-level header
+
+### Third-level header
+```
+
+If you do not want a certain heading to be numbered, you can add `{-}` after the heading, e.g.,
+
+```markdown
+# Preface {-}
+```
+
+Unordered list items start with `*`, `-`, or `+`, and you can nest one list within another list by indenting the sub-list by four spaces, e.g.,
+
+```markdown
+- one item
+- one item
+- one item
+    - one item
+    - one item
+```
+
+The output is:
+
+- one item
+- one item
+- one item
+    - one item
+    - one item
+
+Ordered list items start with numbers (the rule for nested lists is the same as above), e.g.,
+
+```markdown
+1. the first item
+2. the second item
+3. the third item
+```
+
+The output does not look too much different with the Markdown source:
+
+1. the first item
+2. the second item
+3. the third item
+
+Blockquotes are written after `>`, e.g.,
+
+```markdown
+> "I thoroughly disapprove of duels. If a man should challenge me,
+  I would take him kindly and forgivingly by the hand and lead him
+  to a quiet place and kill him."
+>
+> --- Mark Twain
+```
+
+The actual output (we customized the style for blockquotes in this book):
+
+> "I thoroughly disapprove of duels. If a man should challenge me,
+  I would take him kindly and forgivingly by the hand and lead him
+  to a quiet place and kill him."
+>
+> --- Mark Twain
+
+Plain code blocks can be written after three or more backticks, and you can also indent the blocks by four spaces, e.g.,
+
+````markdown
+```
+This text is displayed verbatim / preformatted
+```
+
+Or indent by four spaces:
+
+    This text is displayed verbatim / preformatted
+````
+
+### Math expressions
+
+Inline LaTeX equations\index{LaTeX math expression} can be written in a pair of dollar signs using the LaTeX syntax, e.g., `$f(k) = \binom{n}{k} p^{k} (1-p)^{n-k}$` (actual output: $f(k)=\binom{n}{k}p^{k}(1-p)^{n-k}$); math expressions of the display style can be written in a pair of double dollar signs, e.g., `$$f(k) = \binom{n}{k} p^{k} (1-p)^{n-k}$$`, and the output looks like this:
+
+$$f\left(k\right)=\binom{n}{k}p^k\left(1-p\right)^{n-k}$$
+
+You can also use math environments inside `$ $` or `$$ $$`, e.g.,
+
+```latex
+$$\begin{array}{ccc}
+x_{11} & x_{12} & x_{13}\\
+x_{21} & x_{22} & x_{23}
+\end{array}$$
+```
+
+$$\begin{array}{ccc}
+x_{11} & x_{12} & x_{13}\\
+x_{21} & x_{22} & x_{23}
+\end{array}$$
+
+```latex
+$$X = \begin{bmatrix}1 & x_{1}\\
+1 & x_{2}\\
+1 & x_{3}
+\end{bmatrix}$$
+```
+
+$$X = \begin{bmatrix}1 & x_{1}\\
+1 & x_{2}\\
+1 & x_{3}
+\end{bmatrix}$$
+
+```latex
+$$\Theta = \begin{pmatrix}\alpha & \beta\\
+\gamma & \delta
+\end{pmatrix}$$
+```
+
+$$\Theta = \begin{pmatrix}\alpha & \beta\\
+\gamma & \delta
+\end{pmatrix}$$
+
+```latex
+$$\begin{vmatrix}a & b\\
+c & d
+\end{vmatrix}=ad-bc$$
+```
+
+$$\begin{vmatrix}a & b\\
+c & d
+\end{vmatrix}=ad-bc$$
+
+## Markdown extensions by bookdown
+
+Although Pandoc's Markdown is much richer than the original Markdown syntax, it still lacks a number of things that we may need for academic writing. For example, it supports math equations, but you cannot number and reference equations in multi-page HTML or EPUB output. We have provided a few Markdown extensions in **bookdown** to fill the gaps.
+
+### Number and reference equations {#equations}
+
+To number and refer to equations\index{equation}\index{cross-reference}, put them in the equation environments and assign labels to them using the syntax `(\#eq:label)`, e.g.,
+
+```latex
+\begin{equation}
+  f\left(k\right) = \binom{n}{k} p^k\left(1-p\right)^{n-k}
+  (\#eq:binom)
+\end{equation}
+```
+
+It renders the equation below:
+
+\begin{equation}
+f\left(k\right)=\binom{n}{k}p^k\left(1-p\right)^{n-k} (\#eq:binom)
+\end{equation}
+
+You may refer to it using `\@ref(eq:binom)`, e.g., see Equation \@ref(eq:binom).
+
+We demonstrate a few more math equation environments below. Here is an unnumbered equation using the `equation*` environment:
+
+```latex
+\begin{equation*}
+\frac{d}{dx}\left( \int_{a}^{x} f(u)\,du\right)=f(x)
+\end{equation*}
+```
+
+\begin{equation*}
+\frac{d}{dx}\left( \int_{a}^{x} f(u)\,du\right)=f(x)
+\end{equation*}
+
+Below is an `align` environment \@ref(eq:align):
+
+```latex
+\begin{align}
+g(X_{n}) &= g(\theta)+g'({\tilde{\theta}})(X_{n}-\theta) \notag \\
+\sqrt{n}[g(X_{n})-g(\theta)] &= g'\left({\tilde{\theta}}\right)
+  \sqrt{n}[X_{n}-\theta ] (\#eq:align)
+\end{align}
+```
+
+\begin{align}
+g(X_{n}) &= g(\theta)+g'({\tilde{\theta}})(X_{n}-\theta) \notag \\
+\sqrt{n}[g(X_{n})-g(\theta)] &= g'\left({\tilde{\theta}}\right)
+  \sqrt{n}[X_{n}-\theta ] (\#eq:align)
+\end{align}
+
+You can use the `split` environment inside `equation` so that all lines share the same number \@ref(eq:var-beta). By default, each line in the `align` environment will be assigned an equation number. We suppressed the number of the first line in the previous example using `\notag`. In this example, the whole `split` environment was assigned a single number.
+
+```latex
+\begin{equation}
+\begin{split}
+\mathrm{Var}(\hat{\beta}) & =\mathrm{Var}((X'X)^{-1}X'y)\\
+ & =(X'X)^{-1}X'\mathrm{Var}(y)((X'X)^{-1}X')'\\
+ & =(X'X)^{-1}X'\mathrm{Var}(y)X(X'X)^{-1}\\
+ & =(X'X)^{-1}X'\sigma^{2}IX(X'X)^{-1}\\
+ & =(X'X)^{-1}\sigma^{2}
+\end{split}
+(\#eq:var-beta)
+\end{equation}
+```
+
+\begin{equation}
+\begin{split}
+\mathrm{Var}(\hat{\beta}) & =\mathrm{Var}((X'X)^{-1}X'y)\\
+ & =(X'X)^{-1}X'\mathrm{Var}(y)((X'X)^{-1}X')'\\
+ & =(X'X)^{-1}X'\mathrm{Var}(y)X(X'X)^{-1}\\
+ & =(X'X)^{-1}X'\sigma^{2}IX(X'X)^{-1}\\
+ & =(X'X)^{-1}\sigma^{2}
+\end{split}
+(\#eq:var-beta)
+\end{equation}
+
+### Theorems and proofs {#theorems}
+
+Theorems\index{theorem} and proofs are commonly used in articles and books in mathematics. However, please do not be misled by the names: a "theorem" is just a numbered/labeled environment, and it does not have to be a mathematical theorem (e.g., it can be an example irrelevant to mathematics). Similarly, a "proof" is an unnumbered environment. In this section, we always use the _general_ meanings of a "theorem" and "proof" unless explicitly stated.
+
+In **bookdown**, the types of theorem environments supported are in Table \@ref(tab:theorem-envs). To write a theorem, you can use the syntax below:
+
+````markdown
+`r ''````{theorem}
+Here is my theorem.
+```
+````
+
+(ref:theorem-envs) Theorem environments in **bookdown**.
+
+```{r theorem-envs, echo=FALSE}
+knitr::kable(data.frame(
+  Environment = names(bookdown:::theorem_abbr),
+  `Printed Name` = unname(unlist(bookdown:::label_names_math)),
+  `Label Prefix` = unname(bookdown:::theorem_abbr),
+  stringsAsFactors = FALSE, check.names = FALSE
+), caption = '(ref:theorem-envs)', booktabs = TRUE)
+```
+
+To write other theorem environments, replace ```` ```{theorem} ```` with other environment names in Table \@ref(tab:theorem-envs), e.g., ```` ```{lemma} ````.
+
+A theorem can have a `name` option so its name will be printed, e.g.,
+
+````markdown
+`r ''````{theorem, name="Pythagorean theorem"}
+For a right triangle, if $c$ denotes the length of the hypotenuse
+and $a$ and $b$ denote the lengths of the other two sides, we have
+$$a^2 + b^2 = c^2$$
+```
+````
+
+If you want to refer to a theorem, you should label it. The label can be written after ```` ```{theorem````, e.g.,
+
+````markdown
+`r ''````{theorem, label="foo"}
+A labeled theorem here.
+```
+````
+
+The `label` option can be implicit, e.g., the following theorem has the label `bar`:
+
+````markdown
+`r ''````{theorem, bar}
+A labeled theorem here.
+```
+````
+
+After you label a theorem, you can refer to it using the syntax `\@ref(prefix:label)`.\index{cross-reference} See the column `Label Prefix` in Table \@ref(tab:theorem-envs) for the value of `prefix` for each environment. For example, we have a labeled and named theorem below, and `\@ref(thm:pyth)` gives us its theorem number \@ref(thm:pyth):
+
+````markdown
+`r ''````{theorem, pyth, name="Pythagorean theorem"}
+For a right triangle, if $c$ denotes the length of the hypotenuse
+and $a$ and $b$ denote the lengths of the other two sides, we have
+
+$$a^2 + b^2 = c^2$$
+```
+````
+
+```{theorem, pyth, name="Pythagorean theorem"}
+For a right triangle, if $c$ denotes the length of the hypotenuse
+and $a$ and $b$ denote the lengths of the other two sides, we have
+
+$$a^2 + b^2 = c^2$$
+```
+
+The proof environments currently supported are `r knitr::combine_words(names(bookdown:::label_names_math2), before = '\x60')`. The syntax is similar to theorem environments, and proof environments can also be named. The only difference is that since they are unnumbered, you cannot reference them.
+
+We have tried to make all these theorem and proof environments work out of the box, no matter if your output is PDF, HTML, or EPUB. If you are a LaTeX or HTML expert, you may want to customize the style of these environments anyway. Customization in HTML is easy with CSS, and each environment is enclosed in `<div></div>` with the CSS class being the environment name, e.g., `<div class="lemma"></div>`. For LaTeX output, we have predefined the style to be `definition` for environments `r knitr::combine_words(bookdown:::style_definition, before='\x60')`, and `remark` for environments `r knitr::combine_words(c('proof', bookdown:::style_remark), before='\x60')`. All other environments use the `plain` style. The style definition is done through the `\theoremstyle{}` command of the **amsthm** package.
+
+Theorems are numbered by chapters by default. If there are no chapters in your document, they are numbered by sections instead. If the whole document is unnumbered (the output format option `number_sections = FALSE`), all theorems are numbered sequentially from 1, 2, ..., N. LaTeX supports numbering one theorem environment after another, e.g., let theorems and lemmas share the same counter. This is not supported for HTML/EPUB output in **bookdown**. You can change the numbering scheme in the LaTeX preamble by defining your own theorem environments, e.g.,
+
+```latex
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+```
+
+When **bookdown** detects `\newtheorem{theorem}` in your LaTeX preamble, it will not write out its default theorem definitions, which means you have to define all theorem environments by yourself. For the sake of simplicity and consistency, we do not recommend that you do this. It can be confusing when your Theorem 18 in PDF becomes Theorem 2.4 in HTML.
+
+Theorem and proof environments will be hidden if the chunk option `echo` is set to `FALSE`. To make sure they are always shown, you may add the chunk option `echo=TRUE`, e.g.,
+
+````markdown
+`r ''````{theorem, echo=TRUE}
+Here is my theorem.
+```
+````
+
+Below we show more examples^[Some examples are adapted from the Wikipedia page https://en.wikipedia.org/wiki/Characteristic_function_(probability_theory)] of the theorem and proof environments, so you can see the default styles in **bookdown**.
+
+```{definition}
+The characteristic function of a random variable $X$ is defined by
+
+$$\varphi _{X}(t)=\operatorname {E} \left[e^{itX}\right], \; t\in\mathcal{R}$$
+```
+
+
+```{example}
+We derive the characteristic function of $X\sim U(0,1)$ with the probability density function $f(x)=\mathbf{1}_{x \in [0,1]}$.
+
+\begin{equation*}
+\begin{split}
+\varphi _{X}(t) &= \operatorname {E} \left[e^{itX}\right]\\
+ & =\int e^{itx}f(x)dx\\
+ & =\int_{0}^{1}e^{itx}dx\\
+ & =\int_{0}^{1}\left(\cos(tx)+i\sin(tx)\right)dx\\
+ & =\left.\left(\frac{\sin(tx)}{t}-i\frac{\cos(tx)}{t}\right)\right|_{0}^{1}\\
+ & =\frac{\sin(t)}{t}-i\left(\frac{\cos(t)-1}{t}\right)\\
+ & =\frac{i\sin(t)}{it}+\frac{\cos(t)-1}{it}\\
+ & =\frac{e^{it}-1}{it}
+\end{split}
+\end{equation*}
+
+Note that we used the fact $e^{ix}=\cos(x)+i\sin(x)$ twice.
+```
+
+```{lemma, chf-pdf}
+For any two random variables $X_1$, $X_2$, they both have the same probability distribution if and only if
+
+$$\varphi _{X_1}(t)=\varphi _{X_2}(t)$$
+```
+
+```{theorem, chf-sum}
+If $X_1$, ..., $X_n$ are independent random variables, and $a_1$, ..., $a_n$ are some constants, then the characteristic function of the linear combination $S_n=\sum_{i=1}^na_iX_i$ is
+
+$$\varphi _{S_{n}}(t)=\prod_{i=1}^n\varphi _{X_i}(a_{i}t)=\varphi _{X_{1}}(a_{1}t)\cdots \varphi _{X_{n}}(a_{n}t)$$
+```
+
+```{proposition}
+The distribution of the sum of independent Poisson random variables $X_i \sim \mathrm{Pois}(\lambda_i),\: i=1,2,\cdots,n$ is $\mathrm{Pois}(\sum_{i=1}^n\lambda_i)$.
+```
+
+```{proof}
+The characteristic function of $X\sim\mathrm{Pois}(\lambda)$ is $\varphi _{X}(t)=e^{\lambda (e^{it}-1)}$. Let $P_n=\sum_{i=1}^nX_i$. We know from Theorem \@ref(thm:chf-sum) that
+
+\begin{equation*}
+\begin{split}
+\varphi _{P_{n}}(t) & =\prod_{i=1}^n\varphi _{X_i}(t) \\
+& =\prod_{i=1}^n e^{\lambda_i (e^{it}-1)} \\
+& = e^{\sum_{i=1}^n \lambda_i (e^{it}-1)}
+\end{split}
+\end{equation*}
+
+This is the characteristic function of a Poisson random variable with the parameter $\lambda=\sum_{i=1}^n \lambda_i$. From Lemma \@ref(lem:chf-pdf), we know the distribution of $P_n$ is $\mathrm{Pois}(\sum_{i=1}^n\lambda_i)$.
+```
+
+```{remark}
+In some cases, it is very convenient and easy to figure out the distribution of the sum of independent random variables using characteristic functions.
+```
+
+```{corollary}
+The characteristic function of the sum of two independent random variables $X_1$ and $X_2$ is the product of characteristic functions of $X_1$ and $X_2$, i.e.,
+
+$$\varphi _{X_1+X_2}(t)=\varphi _{X_1}(t) \varphi _{X_2}(t)$$
+```
+
+```{exercise, name="Characteristic Function of the Sample Mean"}
+Let $\bar{X}=\sum_{i=1}^n \frac{1}{n} X_i$ be the sample mean of $n$ independent and identically distributed random variables, each with characteristic function $\varphi _{X}$. Compute the characteristic function of $\bar{X}$.
+```
+
+```{solution}
+Applying Theorem \@ref(thm:chf-sum), we have
+
+$$\varphi _{\bar{X}}(t)=\prod_{i=1}^n \varphi _{X_i}\left(\frac{t}{n}\right)=\left[\varphi _{X}\left(\frac{t}{n}\right)\right]^n.$$
+```
